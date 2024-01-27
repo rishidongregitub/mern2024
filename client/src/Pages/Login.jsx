@@ -12,7 +12,7 @@ const Login = () => {
   // let handle the input field value
   const handleInput = (e) => {
     let name = e.target.name;
-    let value = e.target.value;
+    let value = e.target.value; 
 
     setUser({
       ...user,
@@ -35,7 +35,7 @@ const Login = () => {
                   src="/images/register.png"
                   alt="a nurse with a cute look"
                   width="400"
-                  height="500"
+                  height="365"
                 />
               </div>
               {/* our main registration code  */}

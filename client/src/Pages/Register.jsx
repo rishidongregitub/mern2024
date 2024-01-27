@@ -36,7 +36,7 @@ const Register = () => {
                   src="/images/register.png"
                   alt="registration image"
                   width="400"
-                  height="500"
+                  height="365"
                 />
               </div>
               {/* our main registration code  */}
