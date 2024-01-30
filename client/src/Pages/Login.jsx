@@ -1,5 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../store/auth";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -7,21 +8,39 @@ const Login = () => {
     password: "",
   });
 
+  const { storeTokenInLS } = useAuth();
   const navigate = useNavigate();
 
-  // let handle the input field value
   const handleInput = (e) => {
     let name = e.target.name;
-    let value = e.target.value; 
+    let value = e.target.value;
 
     setUser({
       ...user,
       [name]: value,
     });
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user);
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("after login: ", responseData);
+        storeTokenInLS(responseData.token);
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -35,38 +54,37 @@ const Login = () => {
                   src="/images/register.png"
                   alt="a nurse with a cute look"
                   width="400"
-                  height="365"
+                  height="500"
                 />
               </div>
-              {/* our main registration code  */}
               <div className="registration-form">
-                <h1 className="main-heading mb-3">Login form</h1>
+                <h1 className="main-heading mb-3">LogIn form</h1>
                 <br />
                 <form onSubmit={handleSubmit}>
                   <div>
-                    <label htmlFor="email">email</label>
+                    <label htmlFor="email">Email</label>
                     <input
                       type="text"
                       name="email"
                       value={user.email}
                       onChange={handleInput}
-                      placeholder="email"
+                      placeholder="Email"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="password">password</label>
+                    <label htmlFor="password">Password</label>
                     <input
                       type="password"
                       name="password"
                       value={user.password}
                       onChange={handleInput}
-                      placeholder="password"
+                      placeholder="Password"
                     />
                   </div>
                   <br />
                   <button type="submit" className="btn btn-submit">
-                    LogIn
+                    LogIn Now
                   </button>
                 </form>
               </div>
